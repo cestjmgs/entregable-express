@@ -1,7 +1,5 @@
 //Importar el módulo de express
 const express = require('express');
-
-
 //crear una instancia en la aplicación de express
 const app = express()
 
@@ -29,6 +27,14 @@ app.get('/tareas', (req, res) => {
     //arreglo como respuesta en formato JSON
     res.json(tareas);
 });
+
+// Importar los routers
+const listViewRouter = require('./list-view-router');
+const listEditRouter = require('./list-edit-router');
+
+// Implementar los routers en rutas específicas
+app.use('/list-view', listViewRouter);
+app.use('/list-edit', listEditRouter);
 
 //puerto
 const port=3000; 

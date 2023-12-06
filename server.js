@@ -2,29 +2,56 @@
 const express = require('express');
 //crear una instancia en la aplicación de express
 const app = express()
+// Importar los routers
+const listViewRouter = require('./list-view-router');
+const listEditRouter = require('./list-edit-router');
+
+// Implementar los routers en rutas específicas
+app.use('/list-view', listViewRouter);
+app.use('/list-edit', listEditRouter);
+
+//puerto
+const port=3000; 
+
 
 //tareas en formato JSON
-app.get('/tareas', (req, res) => {
-    const tareas =[
+const tareas =[
         {
-        "id": "1",
-        "isCompleted": false,
-        "description": "Estudiar guión Manda Patibularia"
+        id: "1",
+        description: "Entregables ADA",
+        completed: false,
         },
         {
-            "id": "2",
-            "isCompleted": false,
-            "description": "Leer El Lobo Estepario"
+        id: "2",
+        description: "Leer El Lobo Estepario",
+        completed: false,
         },
         {
-            "id": "3",
-            "isCompleted": false,
-            "description": "Prepara empanadas veganas"
+        id: "3",
+        description: "Prepara empanadas veganas",
+        completed: false,
+        },
+        {
+        id: "4",
+        description: "Construcción de personaje (Virginia)",
+        completed: false,
+        },
+        {
+        id: "5",
+        description: "Trabajo VG",
+        completed: false,
         }
     ];
-    //arreglo como respuesta en formato JSON
-    res.json(tareas);
-});
+
+function mostrarTareas() {
+        console.log("Lista de tareas")
+        tareas.forEach((tarea, index) => {
+            const status = tarea.completed ? '( X )' : '(   )';
+            console.log(`${index + 1}. ${ status } ${tarea.description}`);
+    })}
+
+mostrarTareas();
+
 //Middleware para gestionar métodos HTTP válidos
 const handleValidMethods = (req, res, next) => {
     const validMethods = ['GET', 'POST', 'PUT', 'DELETE'];
@@ -37,17 +64,6 @@ const handleValidMethods = (req, res, next) => {
   };
 app.use(handleValidMethods);
 app.use(express.json());
-
-// Importar los routers
-const listViewRouter = require('./list-view-router');
-const listEditRouter = require('./list-edit-router');
-
-// Implementar los routers en rutas específicas
-app.use('/list-view', listViewRouter);
-app.use('/list-edit', listEditRouter);
-
-//puerto
-const port=3000; 
 
 app.listen(port, ()=> {
     console.log(`Servidor funcionando en el puerto: ${port}`)

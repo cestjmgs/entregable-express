@@ -10,25 +10,24 @@ const handleParams = (req, res, next) => {
     const tareaId = req.params.tareaId; 
 
     if(isNaN(tareaId)) {
-    return res.status(400).json('Parámetro no válido. Debe ser un número.');
+    return res.status(400).json('Parámetro no válido.');
     }; 
     next();
 
 };
 
-
 //Ruta para las tareas completadas
 listViewRouter.get('/tareascompletadas', handleParams, (req, res) => 
 {
-    const tareasCompletadas = tasks.filter((task) => task.completed);
+    const tareasCompletadas = tareas.filter((tarea) => tarea.completed);
     res.status(200).json(tareasCompletadas);
 })
 
 //Ruta para las tareas por completar
 listViewRouter.get('/tareasporcompletar', handleParams, (req, res) => 
 {
-    const tareasPorCompletar = tasks.filter((task) => !task.completed);
-    res.json(tareasPorCompletar);
+    const tareasPorCompletar = tareas.filter((tarea) => !tarea.completed);
+    res.status(200).json(tareasPorCompletar);
 });
 
 module.exports = listViewRouter; 

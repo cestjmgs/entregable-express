@@ -3,9 +3,7 @@ const express = require('express');
 //crear una instancia en la aplicación de express
 const app = express()
 
-
 //tareas en formato JSON
-
 app.get('/tareas', (req, res) => {
     const tareas =[
         {
@@ -27,6 +25,18 @@ app.get('/tareas', (req, res) => {
     //arreglo como respuesta en formato JSON
     res.json(tareas);
 });
+//Middleware para gestionar métodos HTTP válidos
+const handleValidMethods = (req, res, next) => {
+    const validMethods = ['GET', 'POST', 'PUT', 'DELETE'];
+  
+    if (!validMethods.includes(req.method)) {
+      return res.status(400).json({ mensaje: 'Método HTTP no válido'});
+    }
+  
+    next();
+  };
+app.use(handleValidMethods);
+app.use(express.json());
 
 // Importar los routers
 const listViewRouter = require('./list-view-router');

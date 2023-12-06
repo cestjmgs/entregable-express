@@ -16,14 +16,11 @@ listEditRouter.use((req, res, next)=> {
       next();
 }); 
 
-
-
-
 //Ruta para crear una nueva tarea
 listEditRouter.post('/creartareas', (req, res) => {
     const description = req.body.description;
-    const crearTarea = { id: id, description: description, isCompleted: false};
-    tasks.push(crearTarea);
+    const crearTarea = { id: id, description: description, completed: false};
+    tareas.push(crearTarea);
     res.send('La tarea fue creada exitosamente.')
 }); 
 
@@ -34,7 +31,7 @@ listEditRouter.delete('/eliminartareas/:tareaId', (req, res) => {
         return res.status(404).json('El ID de la tarea no es válido.')
     }
     if(tareaId >= 0 && tareaId < tasks.length) {
-        tasks.splice(tareaId, 1);
+        tareas.splice(tareaId, 1);
         res.send(`Tarea con el ID: ${tareaId} fue eliminada exitosamente.`);
     } else {
         res.send('No se pudo eliminar la tarea. Verifique que los datos son los correctos.')
@@ -48,8 +45,8 @@ listEditRouter.put('/actualizartareas/:tareaId', (req, res) => {
     if (tareaId === undefined || tareaId === null || tareaId < 0) {
         return res.status(404).json('El ID de la tarea no es válido.')
     }
-    if (tareaId >= 0 && tareaId < tasks.length){
-        task[tareaId].description = actualizarDescripcion;
+    if (tareaId >= 0 && tareaId < tareas.length){
+        tarea[tareaId].description = actualizarDescripcion;
         res.send(`Tarea con el ID: ${tareaId} fue actualizada exitosamente.`);
     } else {
         res.send('No se pudo actualizar la tarea. Verifique que los datos son los correctos.')   

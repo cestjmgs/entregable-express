@@ -1,17 +1,22 @@
-//Importar el módulo de express
 const express = require('express');
-//crear una instancia en la aplicación de express
 const app = express()
+const port=3000; 
+require('dotenv').config();
 // Importar los routers
-const listViewRouter = require('./list-view-router');
-const listEditRouter = require('./list-edit-router');
+const listViewRouter = require('./Routers/list-view-router');
+const listEditRouter = require('./Routers/list-edit-router');
+const authRouter = require('./Routers/auth')
+
+//Raiz
+app.get("/", validarToken, (req, res) => {
+  res.send("Bienvenido a la aplicación de gestión de tareas.");
+});
+
 
 // Implementar los routers en rutas específicas
 app.use('/list-view', listViewRouter);
 app.use('/list-edit', listEditRouter);
-
-//puerto
-const port=3000; 
+app.use('/auth', authRouter)
 
 
 //tareas en formato JSON
@@ -62,8 +67,22 @@ const handleValidMethods = (req, res, next) => {
   
     next();
   };
-app.use(handleValidMethods);
-app.use(express.json());
+//Middleware para validar el Token
+  function validarToken(req, res, next){
+    const accessToken = req.headers.authorization
+    if(!accessToken){
+        res.status(401).send("El token no es válido")
+    }
+    jwt.verify(accessToken, process.env.JWT_SECRETO || "secreto", (err)=>{
+        if (err){
+            res.send(err)
+        } else {
+            next();
+        }
+    });
+}
+  app.use(handleValidMethods);
+  app.use(express.json());
 
 app.listen(port, ()=> {
     console.log(`Servidor funcionando en el puerto: ${port}`)
